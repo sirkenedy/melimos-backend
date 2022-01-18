@@ -34,9 +34,10 @@ export class UserUsersRoleMigration1642439272613 implements MigrationInterface {
             ]
         }), true);
 
-        await queryRunner.createIndex("question", new TableIndex({
+        await queryRunner.createIndex("user_users_roles", new TableIndex({
             name: "IDX_FOREIGN_ID",
-            columnNames: ["roleId", "userId"]
+            columnNames: ["roleId", "userId"],
+            // isUnique: true,
         }));
         
         await queryRunner.createForeignKey("user_users_roles", new TableForeignKey({
