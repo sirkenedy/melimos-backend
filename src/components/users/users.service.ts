@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   async findOne(id: any): Promise<User | undefined> {
-    return await this.usersRepository.findOne(id);
+    return await this.usersRepository.findOne(id, {relations: ["roles"]});
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
