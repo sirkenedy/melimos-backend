@@ -9,8 +9,7 @@ export class UserUsersRoleMigration1642439272613 implements MigrationInterface {
                 {
                     name: "id",
                     type: "int",
-                    isPrimary: true,
-                    isGenerated: true,
+                    isPrimary: true,                    isGenerated: true,
                     generationStrategy: 'increment',
                 },
                 {
