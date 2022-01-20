@@ -18,15 +18,20 @@ export class RolesService {
     return this.RolesRepository.find()
   }
 
-  async findOne(id: number): Promise<Role> {
-    return await this.RolesRepository.findOneOrFail(id, {relations: ["users"]}).then(res => res).catch (e => {
-      throw new NotFoundException(e)
+  async findOne(id: any): Promise<Role> {
+    return await this.RolesRepository.findOneOrFail(id).then(res => res).catch (e => {
+      console.log(e);
+      throw new NotFoundException(e);
     });
   }
 
+  async findByIds(...ids): Promise<Role[]> {
+    return await this.RolesRepository.findByIds(ids).then(res=>res);
+  }
+
   async update(id:number, data: object): Promise<Role | UpdateResult | undefined> {
-    this.findOne(id)
-    return await this.RolesRepository.update(id, data).then(res => res);
+    const role = await this.findOne(id).then(res => res)
+    return await this.RolesRepository.save(Object.assign(role, data)).then(res => res);
   }
 
   async remove(id: number) {

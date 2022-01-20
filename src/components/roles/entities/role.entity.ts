@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, BeforeUpdate } from 'typeorm';
 import { Users as User } from '../../users/entities/user.entity'
 
 @Entity()
@@ -12,13 +12,18 @@ export class Roles {
   @Column()
   description: string;
 
-  @Column({ default: null, type:"datetime"})
+  @Column({type:"datetime"})
   created_at?:  Date;
 
-  @Column({ default: null, type:"datetime"})
+  @Column({type:"datetime"})
   updated_at?:  Date;
 
   @ManyToMany(() => User, user => user.roles)
-  @JoinTable()
-  users: User[];
+  users?: User[];
+
+  @BeforeUpdate()
+    updateDates() {
+      console.log("fired")
+        this.updated_at = new Date();
+    }
 }
