@@ -1,5 +1,5 @@
 import { Roles as Role } from './../../roles/entities/role.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable, RelationId, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class Users {
@@ -21,12 +21,28 @@ export class Users {
   @Column({type: "varchar"})
   image?: string;
 
-  @Column({type:"datetime"})
+  @CreateDateColumn()
   created_at?:  Date;
 
-  @Column({type:"datetime"})
+  @UpdateDateColumn()
   updated_at?:  Date;
   
-  @ManyToMany(() => Role, role => role.users)
+  @ManyToMany(() => Role, role => role.users, {
+    eager: true
+  })
+  @JoinTable({
+    name: "role_user",
+    joinColumn: {
+      name: "roleId",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+        name: "userId",
+        referencedColumnName: "id"
+    }
+  })
   roles: Role[];
+
+  @RelationId((user: Users) => user.roles)
+  rolesIds: number[];
 }
