@@ -4,12 +4,13 @@ export class UserUsersRoleMigration1642439272613 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: "user_users_roles",
+            name: "role_user",
             columns: [
                 {
                     name: "id",
                     type: "int",
-                    isPrimary: true,                    isGenerated: true,
+                    isPrimary: true,
+                    isGenerated: true,
                     generationStrategy: 'increment',
                 },
                 {
@@ -33,19 +34,19 @@ export class UserUsersRoleMigration1642439272613 implements MigrationInterface {
             ]
         }), true);
 
-        await queryRunner.createIndex("user_users_roles", new TableIndex({
+        await queryRunner.createIndex("role_user", new TableIndex({
             name: "IDX_FOREIGN_ID",
             columnNames: ["roleId", "userId"],
-            // isUnique: true,
+            isUnique: true,
         }));
         
-        await queryRunner.createForeignKey("user_users_roles", new TableForeignKey({
+        await queryRunner.createForeignKey("role_user", new TableForeignKey({
             columnNames: ["roleId"],
             referencedColumnNames: ["id"],
             referencedTableName: "roles",
             onDelete: "CASCADE"
         }));
-        await queryRunner.createForeignKey("user_users_roles", new TableForeignKey({
+        await queryRunner.createForeignKey("role_user", new TableForeignKey({
             columnNames: ["userId"],
             referencedColumnNames: ["id"],
             referencedTableName: "users",
@@ -54,13 +55,13 @@ export class UserUsersRoleMigration1642439272613 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        const table = await queryRunner.getTable("user_users_roles");
+        const table = await queryRunner.getTable("role_user");
         const roleForeignKey = table.foreignKeys.find(fk => fk.columnNames.indexOf("roleId") !== -1);
         const userForeignKey = table.foreignKeys.find(fk => fk.columnNames.indexOf("userId") !== -1);
-        await queryRunner.dropForeignKey("user_users_roles", roleForeignKey);
-        await queryRunner.dropForeignKey("user_users_roles", userForeignKey);
-        await queryRunner.dropIndex("user_users_roles", "IDX_FOREIGN_ID");
-        await queryRunner.dropTable("IDX_FOREIGN_ID");
+        await queryRunner.dropForeignKey("role_user", roleForeignKey);
+        await queryRunner.dropForeignKey("role_user", userForeignKey);
+        await queryRunner.dropIndex("role_user", "IDX_FOREIGN_ID");
+        await queryRunner.dropTable("role_user");
     }
 
 }

@@ -15,7 +15,8 @@ import { RolesGuard } from './utils/guards/roles.guard';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.development.env'
+      envFilePath: '.development.env',
+      isGlobal : true
     }), 
     
     TypeOrmModule.forRoot(), UsersModule, RolesModule, AuthModule
