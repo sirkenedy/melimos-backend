@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { RolesService } from '../roles/roles.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Role } from '../../utils/enum/role.enum';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService, private jwtService: JwtService) {}
+  constructor(private usersService: UsersService, 
+    private jwtService: JwtService,
+    private rolesService: RolesService
+    ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne({"email":email});
@@ -35,7 +40,10 @@ export class AuthService {
   }
 
     async register(data) {
-        data.password = await bcrypt.hash(data.password, 10)
+      const roles = await this.rolesService.findOne({name: Role.User})
+      console.log(roles)
+        data.password = await bcrypt.hash(data.password, 10);
+        data.roles = roles;
         let response = await this.usersService.create(data);
         if (response) {
             const { password, ...result } = response;
@@ -46,4 +54,19 @@ export class AuthService {
   decodeToken(token) : any {
     return this.jwtService.decode(token)
   }
+
+  // private async generateToken(user) {
+  //   const token = await this.jwtService.signAsync(user);
+  //   return token;
+  // }
+
+  // private async hashPassword(password) {
+  //     const hash = await bcrypt.hash(password, 10);
+  //     return hash;
+  // }
+
+  // private async comparePassword(enteredPassword, dbPassword) {
+  //     const match = await bcrypt.compare(enteredPassword, dbPassword);
+  //     return match;
+  // }
 }
