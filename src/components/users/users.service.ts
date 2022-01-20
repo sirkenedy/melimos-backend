@@ -13,6 +13,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
+    // return createUserDto;
     return await this.usersRepository.save(createUserDto).then(res => res).catch(e => { 
       throw new UnprocessableEntityException() 
     });
