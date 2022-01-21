@@ -4,12 +4,17 @@ import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Roles as Role } from './entities/role.entity';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { Roles } from '../../utils/decorators/roles.decorator';
+import { Role as E_Role} from '../../utils/enum/role.enum'
+import { RolesGuard } from 'src/utils/guards/roles.guard';
 
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(E_Role.SuperAdmin)
   @Post()
   create(@Body() CreateRoleDto: CreateRoleDto) {
     return this.rolesService.create(CreateRoleDto);

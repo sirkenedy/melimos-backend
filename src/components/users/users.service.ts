@@ -12,9 +12,11 @@ export class UsersService {
     private usersRepository: Repository<User>
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    console.log(createUserDto);
     // return createUserDto;
-    return await this.usersRepository.save(createUserDto).then(res => res).catch(e => { 
+    return this.usersRepository.save(createUserDto).then(res => res).catch(e => { 
+      console.log(e);
       throw new UnprocessableEntityException() 
     });
   }
@@ -24,7 +26,7 @@ export class UsersService {
   }
 
   async findOne(id: any): Promise<User | undefined> {
-    return await this.usersRepository.findOne(id, {relations: ["roles"]});
+    return await this.usersRepository.findOne(id);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
