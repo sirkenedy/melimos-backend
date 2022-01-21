@@ -28,16 +28,17 @@ export class Users {
   updated_at?:  Date;
   
   @ManyToMany(() => Role, role => role.users, {
-    eager: true
+    eager: true,
+    cascade: true,
   })
   @JoinTable({
     name: "role_user",
     joinColumn: {
-      name: "roleId",
+      name: "userId",
       referencedColumnName: "id"
     },
     inverseJoinColumn: {
-        name: "userId",
+        name: "roleId",
         referencedColumnName: "id"
     }
   })

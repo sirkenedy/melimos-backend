@@ -19,7 +19,7 @@ export class Roles {
   updated_at?:  Date;
 
   @ManyToMany(() => User, user => user.roles)
-  users?: User[];
+  users: User[];
 
   @BeforeUpdate()
     updateDates() {

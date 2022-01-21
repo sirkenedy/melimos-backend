@@ -40,11 +40,10 @@ export class AuthService {
   }
 
     async register(data) {
-      const roles = await this.rolesService.findOne({name: Role.User})
-      console.log(roles)
+      const role = await this.rolesService.findOne({name: Role.User})
         data.password = await bcrypt.hash(data.password, 10);
-        data.roles = roles;
-        let response = await this.usersService.create(data);
+        data.roles = [role];
+        let response = await this.usersService.create(data).then(res => res);
         if (response) {
             const { password, ...result } = response;
             return result;
