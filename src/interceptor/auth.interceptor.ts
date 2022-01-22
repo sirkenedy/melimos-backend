@@ -2,11 +2,11 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nes
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from '../components/auth/auth.service';
-import { UsersService } from '../components/users/users.service';
+// import { UsersService } from '../components/users/users.service';
 
 @Injectable()
 export class AuthInterceptor implements NestInterceptor {
-  constructor( private authService: AuthService, private usersService: UsersService) {}
+  constructor( private authService: AuthService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest();
