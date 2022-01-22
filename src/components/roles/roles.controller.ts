@@ -1,3 +1,4 @@
+import { Public } from './../../utils/decorators/is-public.decorator';
 import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { RolesService } from './roles.service';
@@ -13,13 +14,13 @@ import { RolesGuard } from 'src/utils/guards/roles.guard';
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(E_Role.SuperAdmin)
   @Post()
   create(@Body() CreateRoleDto: CreateRoleDto) {
     return this.rolesService.create(CreateRoleDto);
   }
-
+  
+  @Roles(E_Role.User)
   @Get()
   findAll() {
     return this.rolesService.findAll();
