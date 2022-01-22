@@ -14,28 +14,25 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne({"email":email});
-    if (user && bcrypt.compare(user.password, await bcrypt.hash(pass, 10))) {
+    if (user && this.comparePassword(user.password, await this.hashPassword(pass))) {
       const { password, ...result } = user;
       return result;
     }
     return null;
   }
 
-  async login(user: any) {
+  async login({user}: any) {
     const payload = { 
         user : {
-            id: user.user.id, 
-            email: user.user.email, 
-            name: user.user.name, 
-            roles: user.user.roles, 
-            created_at: user.user.created_at, 
-            updated_at: user.user.updated_at 
+            id: user.id, 
+            email: user.email, 
+            name: user.name, 
+            roles: user.roles.map((role) => role.name), 
+            created_at: user.created_at, 
+            updated_at: user.updated_at 
         }
     };
-    // console.log({payload});
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    return this.generateToken(payload)
 
   }
 
@@ -54,18 +51,18 @@ export class AuthService {
     return this.jwtService.decode(token)
   }
 
-  // private async generateToken(user) {
-  //   const token = await this.jwtService.signAsync(user);
-  //   return token;
-  // }
+  private generateToken(payload) {
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
 
-  // private async hashPassword(password) {
-  //     const hash = await bcrypt.hash(password, 10);
-  //     return hash;
-  // }
+  private async hashPassword(password) {
+      const hash = await bcrypt.hash(password, 10);
+      return hash;
+  }
 
-  // private async comparePassword(enteredPassword, dbPassword) {
-  //     const match = await bcrypt.compare(enteredPassword, dbPassword);
-  //     return match;
-  // }
+  private async comparePassword(enteredPassword, dbPassword) {
+      return await bcrypt.compare(enteredPassword, dbPassword);
+  }
 }
