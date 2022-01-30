@@ -26,7 +26,6 @@ export class RolesGuard implements CanActivate {
     if (tokenArray) {
       req.user = this.authService.decodeToken(tokenArray.split(" ")[1]).user;
     }
-    console.log("first",req.user)
-    return requiredRoles.some((role) => req.user.roles?.includes(role));
+    return requiredRoles.some((role) => req.user?.roles?.includes(role));
   }
 }

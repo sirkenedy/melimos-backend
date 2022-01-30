@@ -13,10 +13,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    console.log(createUserDto);
-    // return createUserDto;
     return this.usersRepository.save(createUserDto).then(res => res).catch(e => { 
-      console.log(e);
       throw new UnprocessableEntityException() 
     });
   }
