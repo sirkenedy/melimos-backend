@@ -13,6 +13,9 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { RolesGuard } from './utils/guards/roles.guard';
 import { BlogsModule } from './components/blogs/blogs.module';
+import { ContactsModule } from './components/contacts/contacts.module';
+import { CategoriesModule } from './components/categories/categories.module';
+import { SubscriptionsModule } from './components/subscriptions/subscriptions.module';
 
 @Module({
   imports: [
@@ -21,7 +24,7 @@ import { BlogsModule } from './components/blogs/blogs.module';
       isGlobal : true
     }), 
     
-    TypeOrmModule.forRoot(), UsersModule, RolesModule, AuthModule, BlogsModule
+    TypeOrmModule.forRoot(), UsersModule, RolesModule, AuthModule, BlogsModule, ContactsModule, CategoriesModule, SubscriptionsModule
   ],
   controllers: [AppController],
   providers: [AppService, Unique, Exist, 

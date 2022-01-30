@@ -20,18 +20,19 @@ export class RolesController {
     return this.rolesService.create(CreateRoleDto);
   }
   
-  @Roles(E_Role.User)
+  @Roles(E_Role.SuperAdmin)
   @Get()
   findAll() {
     return this.rolesService.findAll();
   }
 
+  @Roles(E_Role.SuperAdmin)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Role> {
     return this.rolesService.findOne(+id)
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @Roles(E_Role.SuperAdmin)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() UpdateRoleDto: UpdateRoleDto, @Res() res: Response) {
     const response = await this.rolesService.update(+id, UpdateRoleDto);
@@ -39,7 +40,7 @@ export class RolesController {
     return res.status(HttpStatus.NOT_FOUND).json({"error" : "The resource to be updated no longer exist"})
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @Roles(E_Role.SuperAdmin)
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() res: Response) {
     await this.rolesService.remove(+id);
