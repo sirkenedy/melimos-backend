@@ -20,7 +20,6 @@ export class ContactsMigration1642942095774 implements MigrationInterface {
                 {
                     name: "email",
                     type: "varchar",
-                    isUnique:true
                 },
                 {
                     name: "subject",
