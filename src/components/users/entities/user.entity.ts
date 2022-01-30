@@ -1,5 +1,6 @@
 import { Roles as Role } from './../../roles/entities/role.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable, RelationId, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { Blog } from './../../blogs/entities/blog.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable, RelationId, UpdateDateColumn, CreateDateColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Users {
@@ -43,6 +44,9 @@ export class Users {
     }
   })
   roles: Role[];
+
+  @OneToMany(() => Blog, blog => blog.user)
+  blogs: Blog[];
 
   @RelationId((user: Users) => user.roles)
   rolesIds: number[];
