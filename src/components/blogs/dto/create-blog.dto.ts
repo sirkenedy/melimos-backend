@@ -11,13 +11,7 @@ export class CreateBlogDto {
     @IsNotEmpty({"message" : "Enter post content or description"})
     description: string;
 
-    @IsNotEmpty({"message" : "upload an image"})
-    image: string;
-
-    @IsNotEmpty({"message" : "unauthrorized user"})
-    user: string;
-
-    // @IsNotEmpty({"message" : "Dunauthrorized user"})
+    // @IsNotEmpty({"message" : "unauthrorized user"})
     // keywords: string;
 
     // @IsNotEmpty({"message" : "Dunauthrorized user"})

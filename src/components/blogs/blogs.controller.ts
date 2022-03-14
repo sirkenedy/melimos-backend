@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { Roles } from '../../utils/decorators/roles.decorator';
 import { Role as E_Role} from '../../utils/enum/role.enum';
@@ -13,8 +14,10 @@ export class BlogsController {
 
   @Roles(E_Role.SuperAdmin)
   @Post()
-  create(@Body() createBlogDto: CreateBlogDto) {
-    return this.blogsService.create(createBlogDto);
+  @UseInterceptors(FileInterceptor('image'))
+  create(@UploadedFile() image: Express.Multer.File, @Body() createBlogDto: CreateBlogDto) {
+    console.log(image);
+    return this.blogsService.create(createBlogDto, image);
   }
   
   @Roles(E_Role.SuperAdmin)
@@ -43,4 +46,10 @@ export class BlogsController {
     await this.blogsService.remove(+id);
     res.status(HttpStatus.OK).json({"message" : "Blog details deleted successfully"});
   }
+
+  // @Get('post-image/:imgpath')
+  //   async seeUploadedImage(@Param('imgpath') image, @Res() res) {
+  //     await this.blogsService.get().pipe(res);
+  //       return res.sendFile(image, { root: './files/post-images' });
+  //    }
 }
