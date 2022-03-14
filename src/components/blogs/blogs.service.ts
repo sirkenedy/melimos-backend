@@ -1,3 +1,4 @@
+import { S3FilesService } from './../../services/storage/s3-files/s3-files.service';
 import { Blog } from './entities/blog.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,10 +11,15 @@ export class BlogsService {
   constructor(
     @InjectRepository(Blog)
     private blogsRepository: Repository<Blog>,
+    private s3FileUploadService: S3FilesService
   ) {}
 
-  async create(data: object)  {
-    return await this.blogsRepository.save(Object.assign(new Blog(), data)).then(res => res);
+  async create(data: object, imageFile)  {
+    const fileResult = await this.s3FileUploadService.uploadPublicFile(imageFile.buffer, imageFile.originalname).then(res=>res);
+    console.log("file",fileResult);
+    const url = await this.s3FileUploadService.getFileObject().then(res=>res);
+    return url;
+    // return await this.blogsRepository.save(Object.assign(new Blog(), data)).then(res => res);
   }
 
   findAll(): Promise<Blog[]> {
@@ -38,5 +44,9 @@ export class BlogsService {
   async remove(id: number) {
     this.findOne(id)
     return await this.blogsRepository.delete(id);
+  }
+
+  async get() {
+    return await this.s3FileUploadService.getFileObject().then(res=>res);
   }
 }
