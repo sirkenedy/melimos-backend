@@ -16,15 +16,17 @@ import { BlogsModule } from './components/blogs/blogs.module';
 import { ContactsModule } from './components/contacts/contacts.module';
 import { CategoriesModule } from './components/categories/categories.module';
 import { SubscriptionsModule } from './components/subscriptions/subscriptions.module';
+import { S3FilesModule } from './services/storage/s3-files/s3-files.module';
+import { LocalFilesModule } from './services/storage/local-files/local-files.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.development.env',
+      envFilePath: '.env',
       isGlobal : true
     }), 
     
-    TypeOrmModule.forRoot(), UsersModule, RolesModule, AuthModule, BlogsModule, ContactsModule, CategoriesModule, SubscriptionsModule
+    TypeOrmModule.forRoot(), UsersModule, RolesModule, AuthModule, BlogsModule, ContactsModule, CategoriesModule, SubscriptionsModule, S3FilesModule, LocalFilesModule
   ],
   controllers: [AppController],
   providers: [AppService, Unique, Exist, 
